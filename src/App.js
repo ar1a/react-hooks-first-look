@@ -1,13 +1,31 @@
-import React, { useState } from 'react';
+import React, { useReducer } from 'react';
 import './App.css';
 
 const Counter = () => {
-  const [count, setCount] = useState(0);
+  const [state, dispatch] = useReducer(
+    (state, action) => {
+      switch (action.type) {
+        case 'INC':
+          return { count: state.count + 1 };
+        case 'DEC':
+          return { count: state.count - 1 };
+        case 'RESET':
+          return { count: 0 };
+        default:
+          return state;
+      }
+    },
+    {
+      count: 0
+    }
+  );
 
   return (
     <div>
-      <p>You clicked {count} times</p>
-      <button onClick={() => setCount(count + 1)}>Click me</button>
+      <p>Current count: {state.count}</p>
+      <button onClick={() => dispatch({ type: 'DEC' })}>-</button>{' '}
+      <button onClick={() => dispatch({ type: 'RESET' })}>0</button>{' '}
+      <button onClick={() => dispatch({ type: 'INC' })}>+</button>
     </div>
   );
 };
